@@ -8,7 +8,7 @@ const generateJwt = (id, email, role) => {
         {id: id, email: email, role: role},
         process.env.SECRET_KEY,
         {
-            expiresIn: '24h',
+            expiresIn: "24h",
         }
     )
 }
