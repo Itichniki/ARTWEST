@@ -11,7 +11,7 @@ const authMiddleware = (req, res, next) => {
         const token = req.headers.authorization.split(' ')[1];
 
         if(!token) {
-            return next(ApiError.badRequest("Unauthorized"));
+            return ApiError.badRequest("Unauthorized");
         }
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
@@ -19,7 +19,7 @@ const authMiddleware = (req, res, next) => {
         next();
 
     } catch(e) {
-        return next(ApiError.internal("Something went wrong"));
+        return ApiError.internal("Something went wrong");
     }
 
     next();
