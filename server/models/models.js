@@ -17,7 +17,6 @@ const User  = sequelize.define('User', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     email: {type: DataTypes.STRING, unique: true, allowNull: false, validate: {isEmail: true}},
     password: {type: DataTypes.STRING, allowNull: false},
-    password_confirmation: {type: DataTypes.STRING, allowNull: false},
     role: {type: DataTypes.STRING, allowNull: false, defaultValue: 'USER'},
 }, {
     tableName: 'user',
@@ -27,7 +26,7 @@ const User  = sequelize.define('User', {
 
 const Company = sequelize.define('Company', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false},
-    name: {type: DataTypes.STRING, allowNull: false},
+    name: {type: DataTypes.STRING, allowNull: false, unique: true},
     description: {type: DataTypes.STRING, allowNull: false},
 }, {
     tableName: 'company',
@@ -66,6 +65,7 @@ const Property = sequelize.define('Property', {
     num_bedrooms: { type: DataTypes.INTEGER, allowNull: false },
     num_bathrooms: { type: DataTypes.INTEGER, allowNull: false },
     price: { type: DataTypes.INTEGER, allowNull: false },
+    image: {type: DataTypes.STRING, allowNull: false},
 
     property_type_id: { type: DataTypes.INTEGER, allowNull: false,
         references: {
@@ -97,6 +97,18 @@ const Property = sequelize.define('Property', {
 }, {
     tableName: 'property',
 });
+
+// const Favorite = sequelize.define('Favorite', {
+//     id: {type: DataTypes.INTEGER, primaryKey: true, allowNull: false, autoIncrement: true, unique: true},
+//     user_id: {type: DataTypes.INTEGER, allowNull: false,
+//     references: {
+//         model: 'user',
+//         key: 'id',
+//     }},
+// }, {
+//         tableName: 'favorite',
+//         timestamps: false,
+// })
 
 const UserFavorite = sequelize.define('UserFavorite', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, unique: true, allowNull: false},
@@ -207,6 +219,17 @@ User.belongsToMany(Property, {
 Property.belongsToMany(User, {
     through: 'UserFavorite',
 });
+
+// User.hasOne(Favorite)
+// Favorite.belongsTo(User)
+//
+// Favorite.belongsToMany(Property, {
+//     through: FavoriteProperty,
+// })
+
+// Property.belongsToMany(Favorite, {
+//     through: FavoriteProperty,
+// })
 
 // User Offer
 
@@ -333,6 +356,8 @@ export {
     Listing,
     ListingStatus,
     UserFavorite,
+    // FavoriteProperty,
+    // Favorite,
     Project,
     // UserOffer,
     Company

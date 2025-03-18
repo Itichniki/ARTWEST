@@ -67,7 +67,7 @@ class UserController {
             const token = generateJwt({id: req.user.id, email: req.user.email, role: req.user.role});
             return res.json({token});
         } catch (e) {
-            console.log(e);
+            return res.status(500).json("Something went wrong!");
         }
     }
 
