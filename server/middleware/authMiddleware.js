@@ -8,20 +8,25 @@ const authMiddleware = (req, res, next) => {
     }
 
     try {
-        const token = req.headers.authorization.split(' ')[1];
+
+        const authToken = req.headers.authorization;
+
+        if (!authToken) {
+            return next(ApiError.badRequest("Unauthorized"));
+        }
+        
+        const token = authToken.split(' ')[1];
 
         if(!token) {
-            return ApiError.badRequest("Unauthorized");
+            return next(ApiError.unAuthorized("Unauthorized"));
         }
 
         req.user = jwt.verify(token, process.env.JWT_SECRET);
-        next();
+        return next();
 
     } catch(e) {
-        return ApiError.internal("Something went wrong");
+        return next(ApiError.internal("Something went wrong"));
     }
-
-    next();
 }
 
 export default authMiddleware;

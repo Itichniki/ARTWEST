@@ -1,89 +1,73 @@
-import {Type} from "../models/models.js";
 import ApiError from "../error/ApiError.js";
-import {v4 as uuid_v4} from "uuid";
-import path from "path";
-import { getDirname } from "../utils/pathUtils.js";
+import {createType} from "../services/type/createType.js";
+import {getAllTypes} from "../services/type/getAllTypes.js";
+import {getOneType} from "../services/type/getOneType.js";
+import {deleteType} from "../services/type/deleteType.js";
+import {updateType} from "../services/type/updateType.js";
 
 class TypeController {
 
-    async create (req, res, next) {
+    async getAllTypes (req, res) {
         try {
+
+            const types = await getAllTypes();
+            return res.json(types);
+
+        } catch (e) {
+            return ApiError.internal(e.message);
+        }
+    }
+
+    async getOneType (req, res) {
+        try {
+
+            const id = req.params.id;
+            const type = await getOneType(id);
+            return res.json(type);
+
+        } catch (e) {
+            return ApiError.internal(e.message);
+        }
+    }
+
+    async createType (req, res) {
+
+        try {
+
             const {name} = req.body;
             const {icon} = req.files;
-            const __dirname = getDirname(import.meta.url)
-            let iconFileName = uuid_v4() + ".png";
-
-            //is all info provided
-            if (!name || !icon) {
-                return ApiError.badRequest("Full information should be provided");
-            }
-
-            await icon.mv(path.resolve(__dirname, "..", "public", "images", iconFileName));
-
-            //is type already exists?
-            const candidate = await Type.findOne({where: {name}});
-
-            if (candidate) {
-                return next(ApiError.badRequest("Type already exists"));
-            }
-
-            //create type
-            const type = await Type.create({name, icon: iconFileName});
-
-            //send response
+            const type = await createType({name, icon});
             return res.json(type);
+
         } catch (e) {
-            next(e)
+            return ApiError.internal(e.message)
         }
     }
 
-    async getAll (req, res, next) {
+    async updateType (req, res) {
+
         try {
-            const types = await Type.findAll();
 
-            if (!types) {
-                return next(ApiError.badRequest("Types not found"));
-            }
+            const {name} = req.body;
+            const {icon} = req.files;
+            const type = await updateType({name, icon});
+            return res.json(type);
 
-            return await res.json(types);
-        } catch (e) {
-
-            next(e);
-
+        } catch(e) {
+            return ApiError.internal(e.message);
         }
+
     }
 
-    async getOne (req, res ,next) {
+    async deleteType (req, res) {
         try {
-            const id = req.params.id; //get id
 
-            const type = await Type.findOne({ where: id });  //find type
-
-            if (!type) {
-                return next(ApiError.badRequest("Type not found"));//if type not found throw error
-            }
-
-            return await res.json(type); //return result
-
-        } catch (e) {
-            next(e)//throw internal error
-        }
-    }
-
-    async delete (req, res, next) {
-        try {
             const id = req.params.id;
-
-            const type = await Type.findOne({ where: {id}});
-
-            if (!type) {
-                return next(ApiError.badRequest("Type not found"));
-            }
-            await type.destroy();
-
+            await deleteType(id);
             return res.json(`Type with id ${id} was deleted!`);
+
         } catch (e) {
-            next(e);
+            return ApiError.internal(e.message);
         }
     }
 }

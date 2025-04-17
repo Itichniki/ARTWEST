@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 
 const checkRole = (role) => {
     return (req, res, next) => {
+
         if(req.method === "OPTIONS") {
             next();
         }
@@ -10,6 +11,7 @@ const checkRole = (role) => {
         try {
 
             const authToken = req.headers.authorization;
+
             if (!authToken) {
                 return next(ApiError.badRequest("Unauthorized"));
             }
@@ -24,8 +26,9 @@ const checkRole = (role) => {
 
             req.user = decoded;
             next();
+
         } catch(e) {
-            return next(ApiError.internal("Something went wrong"));
+            return next(ApiError.internal(e.message));
         }
 
     }

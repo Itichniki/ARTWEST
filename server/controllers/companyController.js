@@ -1,27 +1,18 @@
-
-import {Company} from "../models/models.js";
+import updateCompany from "../services/company/updateCompany.js";
+import {createCompany} from "../services/company/createCompany.js";
+import {removeCompany} from "../services/company/removeCompany.js";
 
 class CompanyController {
 
     async createCompany(req, res) {
         try {
-            const {name, description} = req.body;
 
-            if (!name || !description) {
-                return res.status(400).json("Full information should be provided");
-            }
-
-            const candidate = await Company.findOne({where: {name}});
-
-            if (candidate) {
-                return res.status(404).json("Company already exists");
-            }
-
-            const company = await Company.create({name, description});
+            const {name, description, image} = req.body;
+            const company = await createCompany({name, description, image});
             return res.json(company);
 
         } catch(e) {
-            return res.status(500).json("Something went wrong");
+            return res.status(500).json(e.message);
         }
     }
 
@@ -29,25 +20,9 @@ class CompanyController {
         try {
 
             const {id} = req.params;
-
-            if(!id) {
-                return res.status(400).json("Company ID should be provided");
-            }
-
             const {name, description} = req.body;
-
-            const candidate = await Company.findOne({where: {id}})
-
-            if(!candidate) {
-                return res.status(404).json("Company does not exists");
-            }
-
-            if(!name || !description) {
-                return res.status(400).json("Full information should be provided");
-            }
-
-            const updatedCompany = await Company.update({name, description}, {where: {id}});
-            return res.json(`Company ${name} was updated`);
+            const company = await updateCompany({ id, name, description});
+            return res.json(company);
 
         } catch(e) {
             return res.status(500).json("Something went wrong");
@@ -58,19 +33,9 @@ class CompanyController {
         try {
 
             const {id} = req.params;
+            const company = await removeCompany({ id});
+            return res.json(company);
 
-            if(!id) {
-                return res.status(401).json("ID should be provided");
-            }
-
-            const candidate = await Company.findOne({where: {id}})
-
-            if(!candidate) {
-                return res.status(401).json("Company does not exists");
-            }
-
-            await Company.destroy({where: {id}});
-            return res.json(`Company with id ${id} was deleted!`);
         } catch(e) {
             return res.status(500).json("Something went wrong", e);
         }

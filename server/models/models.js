@@ -7,7 +7,7 @@ const Location = sequelize.define('Location', {
     city: { type: DataTypes.STRING, allowNull: false },
     region: { type: DataTypes.STRING, allowNull: false },
     street: { type: DataTypes.STRING, allowNull: false },
-    google_maps_link: { type: DataTypes.STRING, allowNull: false },
+    google_maps_link: { type: DataTypes.STRING, allowNull: true },
 }, {
     tableName: "location",
     timestamps: false,
@@ -153,7 +153,6 @@ PropertyInfo.hasOne(Property, {
 Property.hasOne(PropertyInfo, {
     foreignKey: 'property_id',
 });
-
 
 export {
     User,

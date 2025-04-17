@@ -1,6 +1,7 @@
 import {Router} from 'express';
 import CompanyController from '../controllers/companyController.js';
 import checkRole from "../middleware/checkRoleMiddlware.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = new Router();
 
