@@ -7,18 +7,17 @@ export const addLocation = async ({city, region, street, google_maps_link = ""})
         return ApiError.badRequest("Information should be provided fully");
     }
 
-    const candidate = await Location.findOne({where: {city: city, region: region, street: street}});
+    const candidate = await Location.findOne({where: {city, region, street}});
 
     if(candidate) {
        return ApiError.badRequest("Location already exists");
     }
 
     return await Location.create({
-        where: {
-                city: city,
-                region: region,
-                street: street,
-                google_maps_link: google_maps_link
-            }})
+        city: city,
+        region: region,
+        street: street,
+        google_maps_link: google_maps_link
+    })
     
 }

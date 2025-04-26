@@ -6,15 +6,15 @@ import {Type} from "../../models/models.js";
 
 export const createType = async ({name, icon}) => {
 
-    const __dirname = getDirname(import.meta.url)
-    let iconFileName = uuid_v4() + ".png";
+    // const __dirname = getDirname(import.meta.url)
+    // let iconFileName = uuid_v4() + ".png";
 
     //is all info provided
     if (!name || !icon) {
         return ApiError.badRequest("Full information should be provided");
     }
 
-    await icon.mv(path.resolve(__dirname, "..", "public", "images", iconFileName));
+    // await icon.mv(path.resolve(__dirname, "..", "public", "images", iconFileName));
 
     //is type already exists?
     const candidate = await Type.findOne({where: {name}});
@@ -24,6 +24,6 @@ export const createType = async ({name, icon}) => {
     }
 
     //create type
-    return await Type.create({name, icon: iconFileName});
+    return await Type.create({name, icon});
 
 }

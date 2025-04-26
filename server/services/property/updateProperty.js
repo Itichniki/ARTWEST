@@ -1,7 +1,9 @@
 import ApiError from "../../error/ApiError.js";
 import {Property} from "../../models/models.js";
 
-export const updateProperty = async ({id, name, address_line, price, images, status}) => {
+export const updateProperty = async (id, input) => {
+
+    const {name} = input;
 
     if(!id) {
         return ApiError.badRequest("ID should be provided");
@@ -13,7 +15,7 @@ export const updateProperty = async ({id, name, address_line, price, images, sta
         return ApiError.badRequest("Property not found");
     }
 
-    const result = await Property.update({name, address_line, price, images, status}, {where: {id}});
+    Property.update(input, {where: {id}});
     return `Property ${name} was updated successfully`
 
 }

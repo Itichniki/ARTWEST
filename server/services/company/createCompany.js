@@ -3,8 +3,12 @@ import ApiError from "../../error/ApiError.js";
 
 export const createCompany = async ({name, description, image}) => {
 
-    if (!name || !description) {
-        return ApiError.badRequest("Full information should be provided");
+    if (!name) {
+        return ApiError.badRequest("Name should be provided!");
+    }
+
+    if(!description) {
+        return ApiError.badRequest("Description should be provided!");
     }
 
     const candidate = await Company.findOne({where: {name}});

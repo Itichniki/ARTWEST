@@ -2,37 +2,38 @@ import {createProperty} from "../services/property/createProperty.js";
 import ApiError from "../error/ApiError.js";
 import {updateProperty} from "../services/property/updateProperty.js";
 import {deleteProperty} from "../services/property/deleteProperty.js";
+import {PropertyDto} from "../dto/property.dto.js";
 
 class PropertyController {
 
-    async createProperty(req, res) {
+    async createProperty(req, res, next) {
         try {
 
-            const { name, address_line, price, images, status } = req.body;
-            const property = await createProperty({name, address_line, price, images, status});
+            const input = new PropertyDto(req.body);
+            const property = await createProperty(input);
             return res.json(property);
 
         } catch (e) {
-            return ApiError.internal(e.message);
+            next(ApiError.internal(e.message));
         }
     }
 
-    async updateProperty(req, res) {
+    async updateProperty(req, res, next) {
 
         try {
 
             const { id } = req.params;
-            const {name, address_line, price, images, status} = req.body;
-            const property = await updateProperty({id, name, address_line, price, images, status});
+            const input = new PropertyDto(req.body);
+            const property = await updateProperty(id, input);
             return res.json(property);
 
         } catch(e) {
-            return ApiError.internal(e.message);
+            next(ApiError.internal(e.message));
         }
 
     }
 
-    async deleteProperty(req, res) {
+    async deleteProperty(req, res, next) {
 
         try {
 
@@ -41,7 +42,7 @@ class PropertyController {
             return res.json(property);
 
         } catch(e) {
-            return ApiError.internal(e.message);
+            next(ApiError.internal(e.message));
         }
 
     }

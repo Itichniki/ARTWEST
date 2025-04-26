@@ -34,8 +34,8 @@ class TypeController {
 
         try {
 
-            const {name} = req.body;
-            const {icon} = req.files;
+            const {name, icon} = req.body;
+            // const {icon} = req.files;
             const type = await createType({name, icon});
             return res.json(type);
 

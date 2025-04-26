@@ -5,7 +5,7 @@ const router = new Router();
 
 router.get('/', locationController.getAllLocations);
 router.get('/:id', locationController.getOneLocation);
-router.post('/add', locationController.addLocation);
+router.post('/', locationController.addLocation);
 router.put('/', locationController.updateLocation);
 router.put('/:id', locationController.updateLocation);
 router.post('/', locationController.deleteLocation);

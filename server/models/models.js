@@ -52,17 +52,13 @@ const Type = sequelize.define('Type', {
     timestamps: false,
 });
 
-const PropertyInfo = sequelize.define('PropertyInfo', {
-    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, unique: true},
-    property_id: {type: DataTypes.INTEGER, allowNull: false, unique: true},
-    description: {type: DataTypes.STRING, allowNull: false},
-    property_size: { type: DataTypes.INTEGER, allowNull: false },
-    num_bedrooms: { type: DataTypes.INTEGER, allowNull: false },
-    num_bathrooms: { type: DataTypes.INTEGER, allowNull: false },
-}, {
-    tableName: "property_info",
-    timestamps: false,
-});
+// const PropertyInfo = sequelize.define('PropertyInfo', {
+//     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, unique: true},
+//
+// }, {
+//     tableName: "property_info",
+//     timestamps: false,
+// });
 
 const Property = sequelize.define('Property', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, unique: true },
@@ -71,6 +67,10 @@ const Property = sequelize.define('Property', {
     price: { type: DataTypes.INTEGER, allowNull: false },
     images: {type: DataTypes.STRING, allowNull: false},
     status: {type: DataTypes.ENUM('sold', 'available', 'reserved')},
+    description: {type: DataTypes.STRING, allowNull: false},
+    property_size: { type: DataTypes.INTEGER, allowNull: false },
+    num_bedrooms: { type: DataTypes.INTEGER, allowNull: false },
+    num_bathrooms: { type: DataTypes.INTEGER, allowNull: false },
 }, {
     tableName: 'property',
 });
@@ -146,13 +146,13 @@ Property.belongsTo(Type, {
 
 // Property Info
 
-PropertyInfo.hasOne(Property, {
-    foreignKey: 'property_id',
-});
-
-Property.hasOne(PropertyInfo, {
-    foreignKey: 'property_id',
-});
+// PropertyInfo.hasOne(Property, {
+//     foreignKey: 'property_id',
+// });
+//
+// Property.hasOne(PropertyInfo, {
+//     foreignKey: 'property_id',
+// });
 
 export {
     User,
