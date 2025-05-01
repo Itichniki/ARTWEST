@@ -3,11 +3,18 @@ import cors from "cors";
 import router from "./routes/index.js";
 import sequelize from"./db.js";
 import errorHandler from "./middleware/errorHandlingMiddleware.js"
+import cookieParser from "cookie-parser";
 
 const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
+
+app.use(cors({
+    origin: process.env.URL,
+    credentials: true
+}))
+
 app.use("/api", router);
 app.use(errorHandler);
 

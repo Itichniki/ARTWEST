@@ -10,25 +10,23 @@ const checkRole = (role) => {
 
         try {
 
-            const authToken = req.headers.authorization;
+            const token = req.cookies.token;
 
-            if (!authToken) {
-                return next(ApiError.badRequest("Unauthorized"));
+            if (!token) {
+                next(ApiError.badRequest("Unauthorized"));
             }
-
-            const token = authToken.split(' ')[1];
 
             const decoded = jwt.verify(token, process.env.SECRET_KEY);
 
             if(decoded.role !== role) {
-                return next(ApiError.badRequest("You do not have access!"));
+                next(ApiError.badRequest("You do not have access!"));
             }
 
             req.user = decoded;
             next();
 
         } catch(e) {
-            return next(ApiError.internal(e.message));
+            next(e);
         }
 
     }

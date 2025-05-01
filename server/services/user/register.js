@@ -6,16 +6,17 @@ import {generateJwt} from "../../utils/generateJwt.js";
 export const register = async ({email, password, role}) => {
 
     if(!email) {
-        return ApiError.badRequest("Email should be provided!");
+        throw ApiError.badRequest("Email should be provided!");
     }
 
     if(!password) {
-        return ApiError.badRequest("Password should be provided!");
+        throw ApiError.badRequest("Password should be provided!");
     }
 
     const candidate = await User.findOne({where: {email}});
+
     if (candidate) {
-        return ApiError.badRequest("User already exists");
+        throw ApiError.badRequest("User already exists");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);

@@ -5,40 +5,53 @@ import ApiError from "../error/ApiError.js";
 
 class UserController {
 
-    async register(req, res) {
+    async register(req, res, next) {
 
         try {
 
             const { email, password, role } = req.body;
             const token = await register({ email, password, role });
-            return res.json({token});
+
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'Lax',
+                maxAge: 60 * 60 * 1000
+            });
+
+            return res.json({message: "Registered!"});
 
         } catch (e) {
-            return ApiError.internal(e.message);
+            next(e);
         }
 
     }
 
-    async login(req, res) {
+    async login(req, res, next) {
 
         try {
             const { email, password } = req.body;
-            const token = await login({ email, password });
-            return res.json({token});
+            const token = await login(email, password);
+
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'Lax',
+                maxAge: 60 * 60 * 1000
+            });
+
+            return res.json({message: "Logged in!"});
 
         } catch(e) {
-            return ApiError.internal(e.message);
+            next(e);
         }
     }
 
-    async check(req, res) {
+    async check(req, res, next) {
         try {
-
-            const token = generateJwt({id: req.user.id, email: req.user.email, role: req.user.role});
-            return res.json({token});
-            
+            return res.json({message: "Authorized!", user: req.user});
         } catch (e) {
-            return ApiError.internal(e.message);
+            next(e);
         }
     }
 

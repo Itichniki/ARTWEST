@@ -9,10 +9,10 @@ import propertyRouter from "./propertyRouter.js";
 const router = new Router();
 
 router.use('/user', userRouter);
-router.use('/company', companyRouter);
-router.use('/project', projectRouter);
-router.use('/location', locationRouter);
-router.use('/type', typeRouter);
-router.use('/property', propertyRouter);
+router.use('/companies', companyRouter);
+router.use('/projects', projectRouter);
+router.use('/locations', locationRouter);
+router.use('/types', typeRouter);
+router.use('/properties', propertyRouter);
 
 export default router;
