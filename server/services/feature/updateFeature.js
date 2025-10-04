@@ -7,12 +7,25 @@ export const updateFeature = async ({id, name, icon}) => {
         return ApiError.badRequest("ID should be provided!");
     }
 
-    const candidate = await Feature.findOne({where: {id}});
-
-    if(!candidate) {
-        return ApiError.badRequest("Feature not found!");
+    if(!name && !icon) {
+        return ApiError.badRequest("Any information should be provided");
     }
 
-    return await Feature.update({name, icon}, {where: {id}});
-    
+    const updateData = {};
+
+    if(name !== undefined) {
+        updateData.name = name;
+    }
+
+    if(icon !== undefined) {
+        updateData.icon = icon;
+    }
+
+    const [updated] = await Feature.update(updateData, {where: {id}});
+
+    if(updated === 0) {
+        return ApiError.badRequest("No feature was updated");
+    }
+
+    return await Feature.findOne({where: {id}});
 }

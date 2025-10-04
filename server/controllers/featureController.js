@@ -1,13 +1,14 @@
-import {addFeature} from "../services/feature/addFeature.js";
+import {createFeature} from "../services/feature/createFeature.js";
 import {updateFeature} from "../services/feature/updateFeature.js";
 import {deleteFeature} from "../services/feature/deleteFeature.js";
+import {getAllFeatures} from "../services/feature/getAllFeatures.js";
 
 class FeatureController {
 
     async addFeature(req, res) {
 
         const { name, icon } = req.body;
-        const feature = await addFeature({name, icon});
+        const feature = await createFeature({name, icon});
         return res.json(feature);
 
     }
@@ -26,6 +27,13 @@ class FeatureController {
         const {id} = req.params;
         const feature = await deleteFeature(id);
         return res.json(feature);
+
+    }
+
+    async getAllFeatures(req, res) {
+
+        const features = await getAllFeatures();
+        return res.json(features);
 
     }
 

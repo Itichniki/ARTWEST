@@ -1,0 +1,1 @@
+import {PropertyInfo} from  "../../models/models.js";

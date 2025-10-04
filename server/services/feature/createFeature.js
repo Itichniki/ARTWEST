@@ -1,7 +1,7 @@
 import ApiError from "../../error/ApiError.js";
 import {Feature} from "../../models/models.js";
 
-export const addFeature = async ({name, icon}) => {
+export const createFeature = async ( {name, icon}) => {
 
     if(!name || !icon) {
         return ApiError.badRequest("Info should be provided!");
@@ -14,5 +14,4 @@ export const addFeature = async ({name, icon}) => {
     }
     
     return await Feature.create({name, icon});
-
 }

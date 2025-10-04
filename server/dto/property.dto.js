@@ -15,11 +15,11 @@ export class PropertyDto {
         company_id,
         project_id,
         location_id,
-        type_id
+        type_id,
+        features,
     }) {
         if([
             name,
-            address_line,
             price,
             images,
             status,
@@ -28,11 +28,12 @@ export class PropertyDto {
             num_bedrooms,
             num_bathrooms,
             company_id,
-            project_id,
             location_id,
-            type_id
+            address_line,
+            type_id,
+            features,
         ].some(i => !i)) {
-            throw ApiError.badRequest("Please enter a valid info!");
+            throw ApiError.badRequest("Please enter a valid info.  !");
         }
 
         this.name = name;
