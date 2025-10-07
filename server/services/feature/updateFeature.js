@@ -1,15 +1,19 @@
 import ApiError from "../../error/ApiError.js";
 import {Feature} from "../../models/models.js";
 
-export const updateFeature = async ({id, name, icon}) => {
+export const updateFeature = async (id, {name, icon}) => {
 
     if(!id) {
-        return ApiError.badRequest("ID should be provided!");
+        throw ApiError.badRequest("ID should be provided!");
     }
 
     if(!name && !icon) {
-        return ApiError.badRequest("Any information should be provided");
+        throw ApiError.badRequest("Any information should be provided");
     }
+
+    const candidate = await Feature.findOne({where: {id}});
+
+    if(!candidate) throw ApiError.badRequest("Feature does not exist!");
 
     const updateData = {};
 
@@ -24,8 +28,8 @@ export const updateFeature = async ({id, name, icon}) => {
     const [updated] = await Feature.update(updateData, {where: {id}});
 
     if(updated === 0) {
-        return ApiError.badRequest("No feature was updated");
+        throw ApiError.badRequest("No feature was updated");
     }
 
-    return await Feature.findOne({where: {id}});
+    return candidate.name;
 }

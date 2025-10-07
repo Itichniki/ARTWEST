@@ -6,7 +6,9 @@ export const getOneType = async (id) => {
     const type = await Type.findOne({ where: id });
 
     if (!type) {
-        return (ApiError.badRequest("Type not found"));
+        throw ApiError.badRequest("Type not found");
     }
+
+    return type;
 
 }

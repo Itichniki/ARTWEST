@@ -11,7 +11,7 @@ export const createType = async ({name, icon}) => {
 
     //is all info provided
     if (!name || !icon) {
-        return ApiError.badRequest("Full information should be provided");
+        throw ApiError.badRequest("Full information should be provided");
     }
 
     // await icon.mv(path.resolve(__dirname, "..", "public", "images", iconFileName));
@@ -20,7 +20,7 @@ export const createType = async ({name, icon}) => {
     const candidate = await Type.findOne({where: {name}});
 
     if (candidate) {
-        return ApiError.badRequest("Type already exists");
+        throw ApiError.badRequest("Type already exists");
     }
 
     //create type

@@ -5,6 +5,7 @@ import checkRole from "../middleware/checkRoleMiddlware.js";
 const router = express.Router();
 
 router.get('/', propertyController.getAllProperties);
+router.get('/:id', propertyController.getOneProperty);
 router.post('/', checkRole("ADMIN"), propertyController.createProperty);
 router.put('/:id', checkRole("ADMIN"), propertyController.updateProperty);
 router.delete('/:id', checkRole("ADMIN"), propertyController.deleteProperty);
